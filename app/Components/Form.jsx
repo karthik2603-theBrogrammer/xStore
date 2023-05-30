@@ -2,16 +2,21 @@ import { View, Text } from "react-native";
 import React, { useState } from "react";
 import { Input, Button } from "native-base";
 import { Icon } from "react-native-elements";
+import { useRouter } from "expo-router";
+
 
 const Form = () => {
+  const router = useRouter()
   const [formValues, setFormValues] = useState({
     firstname: null,
     lastname: null,
     phone: null,
     email: null,
-  }); 
+  });
 
   const handleInputChange = (name, value) => {
+    const router = useRouter();
+
     setFormValues((prevFormValues) => ({
       ...prevFormValues,
       [name]: value,
@@ -67,10 +72,17 @@ const Form = () => {
           onChangeText={(text) => handleInputChange("email", text)}
         />
       </View>
-      <Button color='emerald.200'  onPress={() => {
-        console.log(formValues)
-      }}>
-        <Text className = 'text-white'>Success</Text>
+      <Button
+        color="emerald.200"
+        onPress={() => {
+          console.log(formValues);
+        }}
+      >
+        <Text className="text-white">Success</Text>
+      </Button>
+
+      <Button color="emerald.200" onPress={() => {router.push('/contacts-screen/contacts')}}>
+        <Text className="text-white">View Contacts</Text>
       </Button>
     </View>
   );

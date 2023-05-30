@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "scheme": "acme",
+    "web": {
+      "bundler": "metro"
+    },
+    "name": "yucca-testapp-form",
+    "slug": "yucca-testapp-form"
+  }
+}

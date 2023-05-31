@@ -1,9 +1,41 @@
-import { SafeAreaView, ScrollView, View, Text } from "react-native";
+import {
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import { Stack, useRouter } from "expo-router";
 import ScreenHeaderLeft from "../Components/ScreenHeaderLeft";
-import ScreenHeaderRight from "../Components/ScreenHeaderRight";
 import { NativeBaseProvider } from "native-base";
 import ViewContacts from "../Components/ViewContacts";
+import { Icon } from "react-native-elements";
+import * as ScreenOrientation from 'expo-screen-orientation';
+import { useEffect } from "react";
+
+const ScreenHeaderRightAddContact = () => {
+  useEffect(() => {
+    async function lockScreenOrientation() {
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+    }
+    lockScreenOrientation();
+  }, []);
+  const router = useRouter();
+  return (
+    <View>
+      <TouchableOpacity
+        className="flex flex-row space-x-[3px] items-center justify-center"
+        onPress={() => {
+          router.push("/home");
+        }}
+      >
+        <Text className = 'text-1xl font-bold'>Back</Text>
+        <Icon name="sc-telegram" type="evilicon" color="#517fa4" size={50} />
+      </TouchableOpacity>
+    </View>
+  );
+};
+
 const ContactsScreen = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -11,22 +43,21 @@ const ContactsScreen = () => {
         options={{
           headerShadowVisible: false,
           headerLeft: () => <ScreenHeaderLeft />,
-          headerRight: () => <ScreenHeaderRight />,
+          headerRight: () => <ScreenHeaderRightAddContact />,
           headerTitle: "",
         }}
       />
 
-      <ScrollView showsVerticalScrollIndicator={false} className="bg-white">
-        <NativeBaseProvider>
-          <View
-            style={{
-              flex: 1,
-            }}
-          >
-            <ViewContacts/>
-          </View>
-        </NativeBaseProvider>
-      </ScrollView>
+      <NativeBaseProvider>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "white",
+          }}
+        >
+          <ViewContacts />
+        </View>
+      </NativeBaseProvider>
     </SafeAreaView>
   );
 };

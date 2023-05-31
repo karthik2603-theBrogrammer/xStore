@@ -4,19 +4,19 @@ import { Input, Button } from "native-base";
 import { Icon } from "react-native-elements";
 import { useRouter } from "expo-router";
 
-import * as SQLite from 'expo-sqlite';
-const db = SQLite.openDatabase('contacts');
+import * as SQLite from "expo-sqlite";
+const db = SQLite.openDatabase("contacts");
 //db name -> contacts
 
 const Form = () => {
   const router = useRouter();
-  const [contacts, setContacts] = useState([])
+  const [contacts, setContacts] = useState([]);
   const [formValues, setFormValues] = useState({
-    firstname: null,
-    lastname: null,
-    phone: null,
-    email: null,
-  }); 
+    firstname: "",
+    lastname: "",
+    phone: "",
+    email: "",
+  });
 
   const handleInputChange = (name, value) => {
     setFormValues((prevFormValues) => ({
@@ -26,60 +26,71 @@ const Form = () => {
   };
 
   useEffect(() => {
-    db.transaction(tx => {
-      tx.executeSql(
-        'CREATE TABLE IF NOT EXISTS contacts (phone TEXT PRIMARY KEY, fname TEXT, lname TEXT, email TEXT)'
-      );
-    });
-    console.log('table created')
-    fetchContacts();
-    console.log(contacts)
+    makeTable();
   }, [db]);
 
+  const makeTable = () => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        "CREATE TABLE IF NOT EXISTS contacts (phone TEXT PRIMARY KEY, fname TEXT, lname TEXT, email TEXT)"
+      );
+      // console.log("Table Created!");
+    });
+  };
+
   const fetchContacts = () => {
-    db.transaction(tx => {
-      tx.executeSql('SELECT * FROM contacts', [], (_, { rows }) => {
+    db.transaction((tx) => {
+      tx.executeSql("SELECT * FROM contacts", [], (_, { rows }) => {
         setContacts(rows._array);
-      console.log('table accessed')
+        // console.log("table accessed");
       });
     });
   };
 
-  const handleSubmit = () =>{
-    console.log('here')
-    db.transaction(tx => {
+  // const fetchContacts = () => {
+  //   db.transaction(async (tx) => {
+  //     await tx.executeSql
+  //   })
+  // }
+
+  const handleAddContact = () => {
+    db.transaction((tx) => {
       tx.executeSql(
-        'INSERT OR REPLACE INTO contacts (phone, fname, lname, email) VALUES (?, ?, ?, ?)',
-        [formValues.phone, formValues.firstname, formValues.lastname, formValues.email],
+        "INSERT OR REPLACE INTO contacts (phone, fname, lname, email) VALUES (?, ?, ?, ?)",
+        [
+          formValues.phone,
+          formValues.firstname,
+          formValues.lastname,
+          formValues.email,
+        ],
         (_, { rowsAffected }) => {
           if (rowsAffected > 0) {
-            console.log('Contact added successfully');
-          }
-          else{
-            console.log('nope')
+            // console.log("Contact added successfully");
+          } else {
+            // console.log("Contact Already Exists");
           }
           setFormValues({
-            firstname: null,
-            lastname: null,
-            phone: null,
-            email: null,
+            firstname: "",
+            lastname: "",
+            phone: "",
+            email: "",
           });
-          fetchContacts();
         }
       );
     });
-  }
+  };
 
-///DROP
-  const handleDrop =()=>{
-    db.transaction(tx=>{
-      tx.executeSql('DROP table contacts'), ()=>{
-        console.log('Database Dropped')
-        fetchContacts();
-      }
-    })
-  }
-///
+  ///DROP
+  const handleDrop = () => {
+    db.transaction((tx) => {
+      tx.executeSql("DROP TABLE CONTACTS", [], (_, { rowsAffected }) => {
+        // console.log('Table Dropped')
+        makeTable();
+      });
+    });
+  };
+
+  ///
 
   return (
     <View className="flex flex-col justify-center items-center my-5 space-y-6">
@@ -116,7 +127,10 @@ const Form = () => {
             md: "25%",
           }}
           placeholder="Phone Number"
+          isRequired={true}
+          defaultValue="+91 "
           onChangeText={(text) => handleInputChange("phone", text)}
+          keyboardType='numeric'
         />
       </View>
       <View className="flex flex-row  justify-center items-center">
@@ -131,13 +145,18 @@ const Form = () => {
           onChangeText={(text) => handleInputChange("email", text)}
         />
       </View>
-      <Button color='emerald.200'  onPress={handleSubmit}>
-        <Text className = 'text-white'>Success</Text>
+      <Button color="emerald.200" onPress={handleAddContact}>
+        <Text className="text-white">Success</Text>
       </Button>
-      <Button color='emerald.200'  onPress={handleDrop}>
-        <Text className = 'text-white'>Drop</Text>
+      <Button color="emerald.200" onPress={handleDrop}>
+        <Text className="text-white">Drop</Text>
       </Button>
-      <Button color="emerald.200" onPress={() => {router.push('/contacts-screen/contacts')}}>
+      <Button
+        color="emerald.200"
+        onPress={() => {
+          router.push("/contacts-screen/contacts");
+        }}
+      >
         <Text className="text-white">View Contacts</Text>
       </Button>
     </View>

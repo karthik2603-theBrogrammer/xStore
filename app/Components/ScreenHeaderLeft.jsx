@@ -3,7 +3,7 @@ import { View, Text } from "react-native";
 const ScreenHeaderLeft = () => {
   return (
     <View>
-      <Text className = 'font-bold'>Contact Book</Text>
+      <Text className = 'font-bold text-2xl'>Contact Book</Text>
     </View>
   );
 };

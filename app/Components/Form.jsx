@@ -188,43 +188,13 @@ const db = SQLite.openDatabase("contacts");
 const inputStyles =
   "rounded-lg w-[85%] text-center border border-purple-700 py-2   transition ease-in-out transition-400 ";
 const errorStyles = "text-red-600";
-const ToastDetails = [
-  {
-    title: "Account verified",
-    variant: "solid",
-    description: "Thanks for signing up with us.",
-    isClosable: true,
-  },
-  {
-    title: "Something went wrong",
-    variant: "subtle",
-    description: "Please create a support ticket from the support page",
-  },
-  {
-    title: "Network connection restored",
-    variant: "left-accent",
-    description:
-      "This is to inform you that your network connectivity is restored",
-    isClosable: true,
-  },
-  {
-    title: "Invalid email address",
-    variant: "top-accent",
-    description: "Please enter a valid email address",
-  },
-  {
-    title: "Invalid email address",
-    variant: "outline",
-    description: "Please enter a valid email address",
-  },
-];
 
 const validationSchema = Yup.object().shape({
   firstname: Yup.string().required("First Name is required"),
   lastname: Yup.string().required("Last Name is required"),
   phone: Yup.string()
     .required("Phone Number is required")
-    .matches(/^[\d\s+]{14}$/, "Phone Number must be 14 digits"),
+    .matches(/^[\d\s+]{14}$/, "Phone Number must be 10 digits"),
   email: Yup.string().email("Invalid email").required("Email is required"),
 });
 
@@ -233,7 +203,19 @@ const Form = () => {
   const toast = useToast();
 
   useEffect(() => {
-    
+    toast.show({
+      render: () => {
+        return (
+          <Box bg="green.500" px="2" py="5" mx={12} rounded="lg">
+            <Text className="text-white text-[18px] text-center">
+              Welcome to <Text className="text-2xl font-bold">xStore!</Text> A
+              secure app to store away your contacts!
+            </Text>
+          </Box>
+        );
+      },
+    });
+
     makeTable();
   }, [db]);
 
@@ -255,7 +237,7 @@ const Form = () => {
             toast.show({
               render: () => {
                 return (
-                  <Box bg="emerald.500" px="2" py="1"  rounded="sm">
+                  <Box bg="emerald.500" px="2" py="1" rounded="sm">
                     Contact Successfully Added!
                   </Box>
                 );
@@ -266,7 +248,7 @@ const Form = () => {
             toast.show({
               render: () => {
                 return (
-                  <Box bg="red.500" px="2" py="1"  rounded="sm">
+                  <Box bg="red.500" px="2" py="1" rounded="sm">
                     Contact Already Exists
                   </Box>
                 );
@@ -294,7 +276,7 @@ const Form = () => {
         toast.show({
           render: () => {
             return (
-              <Box bg="yellow.500" px="2" py="1"  rounded="sm">
+              <Box bg="yellow.500" px="2" py="1" rounded="sm">
                 Database Dropped Successfully!
               </Box>
             );
@@ -308,7 +290,7 @@ const Form = () => {
   ///
 
   return (
-    <View className = 'h-fit pb-[30%]'>
+    <View className="h-[90vh]">
       <Formik
         initialValues={{
           firstname: "",
@@ -405,7 +387,7 @@ const Form = () => {
                 }}
                 className="bg-transparent"
               >
-                <View className="bg-violet-800 flex flex-row items-center justify-center p-2 rounded-md">
+                <View className="bg-violet-800 flex flex-row items-center justify-center p-2 rounded-md space-x-1">
                   <Icon name="more" color="white" className="m-1" />
                   <Text className="text-white text-1xl font-bold">
                     View All

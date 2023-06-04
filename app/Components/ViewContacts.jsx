@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, FlatList } from "react-native";
-import { Input } from "native-base";
+import { Input, Box } from "native-base";
 import { Icon } from "react-native-elements";
 import Contact from "./Contact";
 
 import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("contacts");
 //db name -> contacts
+import { useToast } from "native-base";
+
+
 
 const ViewContacts = () => {
+  const toast = useToast();
   const [contacts, setContacts] = useState(null);
   const [query, setQuery] = useState("");
   const [emptyContacts, setEmptyContacts] = useState([
@@ -16,6 +20,15 @@ const ViewContacts = () => {
   ]);
 
   useEffect(() => {
+    toast.show({
+      render: () => {
+        return (
+          <Box bg="green.500" px="2" py="5" mx={12}  rounded="sm">
+            <Text className = 'text-white text-[18px] text-center'>Welcome! You may view your contacts here!</Text>
+          </Box>
+        );
+      },
+    });
     db.transaction((tx) => {
       tx.executeSql("SELECT * FROM contacts", [], (_, { rows }) => {
         // console.log("fetching contacts", rows._array);

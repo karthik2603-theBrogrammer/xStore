@@ -43,8 +43,8 @@ const ViewContacts = () => {
   );
   return (
     <View className="flex flex-col  justify-center items-center bg-white">
-      <View className="flex flex-row justify-center items-center">
-        <Icon name="book" className="mr-4" />
+      <View className="flex flex-row justify-center items-center mt-[5%]">
+        <Icon name="book" className="mr-4" color='purple' />
         <Input
           type="text"
           w={{
@@ -58,8 +58,8 @@ const ViewContacts = () => {
       </View>
       <FlatList
         data={
-          (contacts?.filter((item) => item.phone.includes(query)))?.length > 0
-            ? contacts?.filter((item) => item.phone.includes(query))
+          (contacts?.filter((item) => item?.phone?.includes(query)))?.length > 0
+            ? contacts?.filter((item) => item?.phone?.includes(query))
             : emptyContacts
         }
         renderItem={renderContact}

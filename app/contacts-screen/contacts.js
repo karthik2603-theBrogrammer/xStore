@@ -24,13 +24,13 @@ const ScreenHeaderRightAddContact = () => {
   return (
     <View>
       <TouchableOpacity
-        className="flex flex-row space-x-[3px] items-center justify-center"
+        className="flex flex-row items-center justify-center space-x-2 bg-purple-900 p-3 rounded-lg my-3"
         onPress={() => {
           router.push("/home");
         }}
       >
-        <Text className = 'text-1xl font-bold'>Back</Text>
-        <Icon name="sc-telegram" type="evilicon" color="#517fa4" size={50} />
+        <Text className="text-white font-bold">Back</Text>
+        <Icon name="sc-telegram" type="evilicon" color="white" />
       </TouchableOpacity>
     </View>
   );
